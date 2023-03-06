@@ -1,0 +1,87 @@
+const [message,setMessage] = useState({
+  pesan:'',
+  error:'',
+  sukses:'',
+  isSubmit:false
+})
+const [datas,setDatas] = useState({
+  username:'',
+  fullname:'',
+  instagram:'',
+  facebook:'',
+  github:'',
+  linkedin:'',
+  description:'',
+  title:'',
+  background:''
+})
+
+
+useEffect(() => {
+  setDatas({...datas,
+     username:value.data.username,
+     fullname:value.data.fullname,
+     instagram:value.data.instagram_link,
+     facebook:value.data.facebook_link,
+     github:value.data.github_link,
+     linkedin:value.data.linkedin_link,
+     background:value.data.background,
+     description:value.data.banner_description,
+     title:value.data.banner_title
+    })
+    setSelectedOption(value.data.background);
+},[])
+
+const handlerChange = (e) => {
+  const {name,value} = e.target
+if(datas.username.length < 1){
+  setMessage({
+    isSubmit:false
+  })
+}else{
+  setMessage({
+    isSubmit:true
+  })
+}
+
+  setDatas({...datas,
+      [name]:value
+      })
+}
+
+const updateProfiles = async (e) => {
+  e.preventDefault()
+ 
+  setMessage({
+    isSubmit:true
+  })
+
+  if(!datas.instagram && !datas.linkedin && !datas.github && !datas.facebook) {
+    console.log("its okay")
+  } else if(!isValidUrl(datas.instagram) || !isValidUrl(datas.facebook) || !isValidUrl(datas.github) || !isValidUrl(datas.linkedin) ){
+    const pesan = `URL ARE NOT VALID URL `
+    errorMsg(pesan)
+    return
+  }
+  const update = await updateProfile(datas,value.data.uid,selectedOption)
+  if(update.status) successMsg(update.pesan)
+  else errorMsg(update.pesan)
+}
+
+const successMsg = (pesan) => {
+  setMessage({
+    pesan:pesan,
+    error:false,
+    sukses:true,
+    isSubmit:false
+  })
+}
+
+const errorMsg = (error) => {
+  setMessage({
+    pesan:`Something wrong ${error}`,
+    error:true,
+    sukses:false,
+    isSubmit:false
+  })
+}
