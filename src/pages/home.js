@@ -44,17 +44,20 @@ const Home = () => {
     setModal(!modal)
    }
 
+   const obj = {
+    openModal
+   }
     return(
 <>
 
 <main  className='container is-fullhd ' >
 
-<Sidebar openModal={openModal}/>
-<section className='columns is-multiline  ' id='section-container'>
+<Sidebar  data={obj} />
+{/* <section className='' id='section-container'>
 <DiscoverMenu />
 <DiscoverChannel />
-</section>
-
+</section> */}
+<DiscoverChannel />
 
 
 </main>

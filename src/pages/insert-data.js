@@ -1,4 +1,6 @@
 import supabase from "../supabase-config";
+import { getUserById } from "./get-data";
+
 
 export async function insertUserData(id,values){
     console.log(values);
@@ -50,7 +52,6 @@ export async function UserLogin(values){
 }
 
 // UPDATE USER PROFILE
-
 export async function UpdateUserProfile(id,args){
   const { data, error } = await supabase
   .from('users')
@@ -58,6 +59,8 @@ export async function UpdateUserProfile(id,args){
      username:args.username,
      fullname:args.fullname,
      biodata:args.biodata,
+     banner:args.color,
+     phone:args.phone
     })
   .eq('user_id',id)
   .select()
@@ -151,17 +154,33 @@ console.log(error);
   }
 }
 
+// UPLOAD IMAGES
+export async function uploadUserAvatar(images,names){
+  const { data, error} = await supabase.storage
+  .from('avatar')
+  .upload(`public/${names}`, images,{
+    cacheControl: '604800',
+    upsert: false
+  })
+  if(error){
+console.log(error);
+return {error:true,pesan:`Something wrong ${error.message}`}
+  }
+  if(data){
+   console.log(data);
+   return {error:false,pesan:'Update profile success',data:data}
+  }
+}
+
 // GET URL
 export async function getPublicUrl(id,url){
   const { data } = supabase
-  .storage.from('images')
+  .storage.from('avatar')
   .getPublicUrl(url)
   if(data){
     const imgUrl = data.publicUrl;
     console.log(imgUrl);
-    console.log(id);
     console.log(url);
-    const updateBanner = await UpdateBanner(id,imgUrl)
     return imgUrl 
   }
 
@@ -183,12 +202,27 @@ console.log(error.message);
   }
 }
 
-//  REMOVE IMAGES
+//  UPDATE  USER AVATAR
+export async function updateUserAvatar(id,url){
+  const { data, error } = await supabase
+  .from('users')
+  .update({avatar:url})
+  .eq('user_id',id)
+  .select()
+   if(error){
+    return {error:false,pesan:`Something wrong ${error.message}`}
+  }else{
+    if(data){
+      return {error:false,pesan:'Update profile success',data:data}
+    }
+  }
+}
 
+//  REMOVE IMAGES
  export async function removeImages(images){
   const { data, error } = await supabase.storage.from('images')
     .remove([`public/${images.imgName}`])
-    if(error) alert(error)
+    if(error)  return {error:false,pesan:`Something wrong ${error.message}`,data:data}
     else {
       console.log(data);
     }
@@ -216,3 +250,89 @@ return {error:false,pesan:`Something wrong ${error.message}`}
     }
   }
 }
+
+// SEND JOIN REQUEST
+export async function joinGroup(args,name){
+  const { data, error } = await supabase
+  .from('join-group')
+  .insert({
+     user_id:args.user_id,
+     creator_id:args.creator_id,
+     group_id:args.group_id,
+    })
+  .select()
+   if(error){
+    return {error:true,pesan:`Something wrong ${error.message}`}
+  }else{
+    if(data){
+      const args = {
+        sender_id:data[0].user_id,
+        receive_id:data[0].creator_id,
+        type:'join'
+      }
+      const msg = `User ${name} want to join this channel !`
+      console.log(args);
+      const message = await sendMessage(args,msg)
+      console.log(message);
+      return {error:false,pesan:'Sent join success',data:data}
+    }
+  }
+}
+
+// DIRECT MESSAGE
+export async function sendMessage(args,msg){
+  const { data, error } = await supabase
+  .from('direct-message')
+  .insert({
+    sender_uid:args.sender_id,
+    receive_uid:args.receive_id,
+    message:msg,
+    type:args.type
+    })
+  .select()
+   if(error){
+    return {error:true,pesan:`Something wrong ${error.message}`}
+  }else{
+    if(data){
+      console.log(data);
+      return {error:false,pesan:'Send message success',data:data}
+    }
+  }
+}
+
+// APPROVE JOIN GROUP 
+export async function approveJoinGroup(id,value){
+  const { data, error } = await supabase
+  .from('join-group')
+  .update({approve:value})
+  .eq('user_id',id)
+  .select()
+   if(error){
+console.log(error.message);
+return {error:true,pesan:`Something wrong ${error.message}`}
+  }else{
+    if(data){
+      console.log(data);
+      const args = {
+        sender_id:data[0].creator_id,
+        receive_id:data[0].user_id,
+        type:'msg'
+      }
+      if(value){
+        const msg = `Congratulation you already join in group !`
+        const message = await  sendMessage(args,msg)
+        const join = await chatGroupMember(id,data[0].group_id)
+        console.log(join);
+      }else{
+        const msg = `Unfortunately your join proposal had been rejected !`
+        const message = await  sendMessage(args,msg)
+        console.log(message);
+      }
+      return {error:false,pesan:'Approve success',data:data}
+    }
+  }
+}
+
+
+
+

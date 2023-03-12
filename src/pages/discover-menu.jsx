@@ -7,7 +7,7 @@ import AvatarUser from './avatar-user'
 const DiscoverMenu = () => {
 
     return(
-<article className='column is-3 p-0 is-flex flex-column gap-2 txt-white border-r has-background-black-bis ' id='discover-menu'>
+<article className='is-flex flex-column gap-2 txt-white border-r has-background-black-bis ' id='discover-menu'>
 
 <header className='border headers'>
 <h3 className='is-title has-text-primary  is-size-6 is-bold'>Discover</h3>
@@ -37,9 +37,10 @@ const DiscoverMenu = () => {
     </li>
   </ul>
 
-<AvatarUser />
 
 </div>
+
+<AvatarUser />
 
 </article>
     )

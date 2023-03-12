@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AppContext } from '../App'
 import ErrorMessage from './error-message'
-import { createServer, getPublicUrl, removeImages, UploadThumbnail } from './insert-data'
+import { createServer, getPublicUrl, removeImages, UpdateBanner, UploadThumbnail } from './insert-data'
 import UploadAvatar from './upload-avatar'
 
 
@@ -87,12 +87,10 @@ const submitForm = async (e) => {
   const uploadImg = await uploadImage(images.imgUrl,images.imgName)
   if(create.error) errMessage(create.pesan)
   else{
-  setImages({...images ,
-      isUpload:false
-  })
   console.log(uploadImg);
   console.log("^ test");
-  getPublicUrls(create.data[0].id,uploadImg)
+  const url = getPublicUrls(create.data[0].id,uploadImg)
+ UpdateBanner(create.data[0].id,url)
   successMessage(create)
    }
 }

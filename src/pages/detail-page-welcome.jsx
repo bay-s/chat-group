@@ -1,12 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { AppContext } from '../App'
-import img from '../img/cv.png'
 import { getServerDetail } from './get-data'
-import { insertChat } from './insert-data'
 import ModalCreateGroup from './modal-create-group'
 import Sidebar from './sidebar'
-import SidebarDetail from './sidebar-detail'
 import WelcomePage from './welcome-page'
 
 
@@ -16,7 +13,9 @@ const DetailPageWelcome = () => {
    const [text,setText] = useState('')
    const {value} = useContext(AppContext)
    const [modal,setModal] = useState(false)
-
+   const {pathname} = useLocation();
+   const location = pathname.split("/")[1]
+   
    useEffect(() => {
     const getServer = async () => {
       const myServer = await  getServerDetail(id)
@@ -33,17 +32,23 @@ const DetailPageWelcome = () => {
     setModal(!modal)
    }
 
+   const obj = {
+    openModal,
+    id,
+    location,
+    server
+   }
     return(
 <>
 
 <main  className='container is-fullhd ' >
 
-<Sidebar openModal={openModal} id={id}/>
-<section className='columns is-multiline  ' id='section-container'>
+<Sidebar data={obj} />
+{/* <section className='columns is-multiline  ' id='section-container'>
 <SidebarDetail data={server}/>
 <WelcomePage  data={server}/>
-</section>
-
+</section> */}
+<WelcomePage  data={server}/>
 
 
 </main>

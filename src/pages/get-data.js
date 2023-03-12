@@ -111,3 +111,53 @@ export async function getServerDetail(id){
     }
   }
 }
+
+
+// IS ALREADY JOIN 
+export async function isJoinServer(id){
+  const { data, error } = await supabase
+  .from('join-group')
+  .select()
+  .eq('user_id',id)
+   if(error){
+    return {error:true,pesan:`Something wrong ${error.message}`}
+  }else{
+    if(data){
+      console.log(data);
+      return {error:false,pesan:'get is join success',data:data}
+    }
+  }
+}
+
+
+// GET DIRECT MESSAGE
+export async function getDirectMessage(id){
+  const { data, error } = await supabase
+  .from('direct-message')
+  .select()
+  .eq('receive_uid',id)
+   if(error){
+    return {error:true,pesan:`Something wrong ${error.message}`}
+  }else{
+    if(data){
+      console.log(data);
+      return {error:false,pesan:'get messages succes',data:data}
+    }
+  }
+}
+
+// GET DIRECT MESSAGE BY SENDER
+export async function getSenderDirectMessage(id){
+  const { data, error } = await supabase
+  .from('direct-message')
+  .select()
+  .eq('sender_uid',id)
+   if(error){
+    return {error:true,pesan:`Something wrong ${error.message}`}
+  }else{
+    if(data){
+      console.log(data);
+      return {error:false,pesan:'get messages succes',data:data}
+    }
+  }
+}

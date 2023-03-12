@@ -150,14 +150,25 @@ html{
 }
 
 /* START POST */
-.post .quill{
-  margin-bottom: 50px;
-  background-color:  hsl(0, 0%, 21%) !important;
-}
+
 .quill{
+  height: 150px;
+  color: white !important;
+  margin-bottom:40px ;
+}
+
+.quill .ql-container{
+  border:2px solid rgba(255, 255, 255, 0.24) !important;
+}
+
+.quill .ql-toolbar span{
+  color:white !important;
   background-color:  hsl(0, 0%, 21%) !important;
 }
 
+.quill .ql-formats button{
+background-color: white !important;
+}
 /* END POST */
 .fade{
   animation: fadeIn 1s  !important;
@@ -291,9 +302,12 @@ background-color:hsl(0, 0%, 9%) !important;
 #edit-form label{
   color: white;
 }
+
 #edit-form .input{
   color: white !important;
 }
+
+
 .text-lgreen{
   color: var(--lightGreen) !important;
 }
@@ -365,10 +379,23 @@ width: 60%;
   border: none;
   color: hsl(0, 0%, 71%) ;
 }
+
+.forms select{
+  border: none !important;
+  color: hsl(0, 0%, 71%) !important;
+  outline: none !important;
+}
+
+.color-picker{
+height: 120px !important;
+}
+
 #chat-box::-webkit-scrollbar {
   width: 5px;
 }
-
+.modal-card-body::-webkit-scrollbar {
+  width: 10px !important;
+} 
 /* Track */
 #chat-box::-webkit-scrollbar-track {
   background: black;
@@ -397,7 +424,7 @@ width: 60%;
 }
 
 #section-container{
-   margin-left: 64px;
+   margin-left:178px;
 }
 
 #section-body a{
@@ -430,8 +457,12 @@ width: 60%;
       SIDEBAR
 ====================================
 */
+.option a:hover{
+  background-color:hsl(0, 0%, 13%) !important;
+}
 .sidebar-fixed{
-width: 5%;
+/* width: 20%; */
+width: 250px;
 height: 100%;
 position: fixed;
 bottom: 0;
@@ -439,28 +470,20 @@ z-index: 999;
 }
 
 #sidebar-scroll{
-height:520px ;
-top: 50px;
-overflow-y:scroll;
+overflow-y:auto;
 }
 
-#sidebar-scroll .list-channel{
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  overflow-y:scroll;
-}
 
 #sidebar-scroll::-webkit-scrollbar {
   width: 1px;
 }
 
 .sidebar-fixed  .links{
-  border-radius: 50%;
-  padding: 7px 12px;
+  padding:7px 15px;
+  border-radius: 3px;
 }
-.sidebar-fixed  a:hover{
+
+.sidebar-fixed  .links:hover{
   background-color: rgba(128, 128, 128, 0.473);
   transition: 200ms;
 }
@@ -511,13 +534,14 @@ margin-left: 320px;
 }
 
 #col-right{
-margin-left:300px;
+margin-left:250px;
 }
 
 #discover-menu{
 position: fixed;
 height: 100%;
 bottom: 0;
+width: 17%;
 }
 
 .profile-column{
@@ -557,7 +581,7 @@ padding: 80px 0 !important;
 #avatar-container{
   position:fixed;
   bottom: 0;
-  width: 25%;
+  width: 17%;
   z-index: 9;
 }
 

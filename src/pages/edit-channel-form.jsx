@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { useRef } from 'react'
 import { Link} from 'react-router-dom'
 import akun from '../img/akun.jpg'
 import ErrorMessage from './error-message'
 import { UpdateServerInfo } from './insert-data'
-
+import ReactQuill from 'react-quill';
 
 const EditChannelForm = ({data}) => {
 
@@ -13,25 +14,22 @@ const EditChannelForm = ({data}) => {
         sukses:'',
         isSubmit:false
       })
+       
+      const [quill,setQuill] = useState('')
+      const [name, setName] = useState('')
+      
+      const quillRef = useRef(null)
+      const nameRef = useRef(null)
 
-      const [datas,setDatas] = useState({
-        server_name:'',
-        server_description:'',
-      })
-      
-      
       useEffect(() => {
-        setDatas({...datas,
-           server_name:data.server_name,
-           server_description:data.server_description
-          })
+        setQuill(data.server_description)
+        setName(data.server_name)
       },[])
       
       const handlerChange = (e) => {
-        const {name,value} = e.target
-        setDatas({...datas,
-            [name]:value
-        })
+        setName(nameRef.current.value)
+        setQuill(quillRef.current.value)
+   
       }
       
       const updateProfiles = async (e) => {
@@ -40,10 +38,13 @@ const EditChannelForm = ({data}) => {
           isSubmit:true
         })
       
-        if(!datas.server_description && !datas.server_name) {
+        if(!name && !quill) {
           console.log("its okay")
         }
-
+       const datas = {
+       server_name:name,
+       server_description:quill
+       }
         const update = await UpdateServerInfo(data.id,datas)
         if(!update.error) successMsg(update.pesan)
         else errorMsg(update.pesan)
@@ -77,20 +78,20 @@ const EditChannelForm = ({data}) => {
 <div class="field">
   <label class="label">Channel Name</label>
   <div class="control">
-    <input class="input has-background-black-ter no-border is-title is-medium" type="text" name='server_name' defaultValue={data.server_name} onChange={handlerChange }/>
+    <input class="input has-background-black-ter no-border is-title is-medium" type="text" ref={nameRef} name='server_name' defaultValue={data.server_name} onChange={handlerChange }/>
   </div>
 </div>
 
 <hr className='hr' />
 
-<div class="field">
+<div class="field ">
   <label class="label">Channel topic</label>
-  <div class="control">
-    <textarea class="textarea has-background-black-ter no-border is-title txt-white" name='server_description' defaultValue={data.server_description} onChange={handlerChange }></textarea>
+  <div class="control ">
+  <ReactQuill ref={quillRef} theme="snow" value={quill} onChange={handlerChange} name='quill'   />
   </div>
 </div>
 
-<hr className='hr' />
+
 <ErrorMessage pesan={message.pesan} isError={message.isError} sukses={message.sukses}/>
 
 {

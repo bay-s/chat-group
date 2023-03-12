@@ -93,6 +93,7 @@ const App = () => {
     <Route path='/channel/:id/welcome' element={isLogin ? <DetailPageWelcome /> : <Login />} />
     <Route path='/channel/:id/general' element={isLogin ? <DetailPageGeneral /> : <Login />} />
     <Route path='/channel/edit/:id' element={isLogin ? <EditChannel /> : <Login />} />
+    <Route path='/message/:id' element={isLogin ? <DirectMessage /> : <Login />} />
     <Route path='/register/' element={ <Register /> } /> 
     <Route path='/login/' element={ <Login /> } /> 
     <Route path='*' element={<NotFound />} />

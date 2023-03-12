@@ -187,7 +187,8 @@ line-height:  1.5rem !important;
 }
 
 .border{
-    border:2px solid rgba(41, 41, 41, 0.288) ;
+    border:1px solid rgba(117, 117, 117, 0.288)  !important;
+    outline: none !important;
 }
 
 .border-r{
